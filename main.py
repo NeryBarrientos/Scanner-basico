@@ -92,7 +92,6 @@ def analizarData():
     while (int(contador) <= int(len(archivoData))):
         if state == 0:
             if archivoData[contador] == '#':
-                print('Hola')
                 break
             elif archivoData[contador].isalpha():
                 temp += archivoData[contador]
