@@ -9,6 +9,7 @@ archivoInstrucciones = ''
 mes = ''
 year = ''
 datos = []
+datos1 = []
 
 def menuprincipal():
     print("Opciones: \n1.Cargar data \n2.Cargar instrucciones \n3.Analizar \n4.Reportes \n5.Salir")
@@ -21,11 +22,6 @@ def menuprincipal():
     elif int(lectura) == 2:
         cargarInstrucciones()
         menuprincipal()
-        '''notayposicion = usar.Obtenernotas()
-        for i in range(len(notayposicion)):
-            print(usar.MostrarAscendente(notayposicion[i][1]))
-        ejecutar(listaParametros)
-        menuprincipal()'''
     elif int(lectura) == 3:
         analizar()
         menuprincipal()
@@ -77,15 +73,19 @@ def analizar():
     global archivoData,archivoInstrucciones
     archivoData = archivoData + "#"
     archivoInstrucciones = archivoInstrucciones + '@'
-    print(archivoData)
-    print(archivoInstrucciones)
+    #print(archivoData)
+    #print(archivoInstrucciones)
     analizarData()
-    print(datos[0][0])
-    exit()
+    analizarInstrucciones()
+    imprimir = '*********************************************'
+    imprimir1 = 'Archivo analizado exitosamente'
+    print(imprimir.center(50,' ') + '\n' + imprimir1.center(50,' ') + '\n' + imprimir.center(50,' ') + '\n')
+    print(datos)
+    print(datos1)
+    menuprincipal()
 
 def analizarData():
     global archivoData,archivoInstrucciones,mes,year,datos
-    print('AnalizarData')
     contador = 0
     state = 0
     temp = ''
@@ -142,10 +142,48 @@ def analizarData():
             elif archivoData[contador] == ';':
                 contador += 1
             elif archivoData[contador] == ')':
-                print(datos)
                 contador += 1
                 state = 0
                 
-
+def analizarInstrucciones():
+    global datos1
+    contador = 0
+    state = 0
+    temp = ''
+    while (int(contador) <= int(len(archivoInstrucciones))):
+        if state == 0:
+            if archivoInstrucciones[contador] == '@':
+                break
+            elif archivoInstrucciones[contador] == '<' or archivoInstrucciones[contador] == '¿' or archivoInstrucciones[contador] == ' ':
+                contador += 1
+            elif archivoInstrucciones[contador].isalpha():
+                temp += archivoInstrucciones[contador]
+                contador += 1
+            elif archivoInstrucciones[contador] == ':':
+                temp += archivoInstrucciones[contador]
+                contador += 1
+            elif archivoInstrucciones[contador] == '"':
+                state = 1
+                contador += 1
+        elif state == 1:
+            if archivoInstrucciones[contador].isalpha() or archivoInstrucciones[contador].isnumeric() or archivoInstrucciones[contador] == ' ':
+                temp += archivoInstrucciones[contador]
+                contador += 1
+            elif archivoInstrucciones[contador] == '"':
+                contador += 1
+            elif archivoInstrucciones[contador] == ',':
+                contador += 1
+                temporal = temp.split(':')
+                datos1.append(temporal)
+                temp = ''
+                state = 0
+            elif archivoInstrucciones[contador] == '?':
+                contador += 1
+                temporal = temp.split(':')
+                datos1.append(temporal)
+                temp = ''
+            elif archivoInstrucciones[contador] == '>':
+                contador += 1
+                state = 0
 
 menuprincipal()
